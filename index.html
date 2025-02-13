@@ -17,47 +17,48 @@
 <body>
 
     <h2>Food Donation Form</h2>
-    <form id="donation-form">
-        <label for="foodName">Food Name:</label>
-        <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
+  <form action="https://formsubmit.co/mr.errorhere07@gmail.com" method="POST">
+  <label for="foodName">Food Name:</label>
+  <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
 
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity (e.g., kg, servings)" required>
+  <label for="quantity">Quantity:</label>
+  <input type="number" id="quantity" name="quantity" placeholder="Enter quantity (e.g., kg, servings)" required>
 
-        <label for="district">District:</label>
-        <select id="district" name="district" required onchange="updateAreas()">
-            <option value="" disabled selected>Select Your District</option>
-            <option value="Chennai">Chennai</option>
-            <option value="Coimbatore">Coimbatore</option>
-            <option value="Madurai">Madurai</option>
-            <option value="Trichy">Trichy</option>
-            <option value="Salem">Salem</option>
-            <option value="Erode">Erode</option>
-            <option value="Tirunelveli">Tirunelveli</option>
-            <option value="Vellore">Vellore</option>
-            <option value="Tiruppur">Tiruppur</option>
-            <option value="Dharmapuri">Dharmapuri</option>
-            <option value="Kanchipuram">Kanchipuram</option>
-            <option value="Karur">Karur</option>
-            <option value="Namakkal">Namakkal</option>
-            <option value="Pudukkottai">Pudukkottai</option>
-            <option value="Cuddalore">Cuddalore</option>
-        </select>
+  <label for="district">District:</label>
+  <select id="district" name="district" required onchange="updateAreas()">
+    <option value="" disabled selected>Select Your District</option>
+    <option value="Chennai">Chennai</option>
+    <option value="Coimbatore">Coimbatore</option>
+    <option value="Madurai">Madurai</option>
+    <option value="Trichy">Trichy</option>
+    <option value="Salem">Salem</option>
+    <option value="Erode">Erode</option>
+    <option value="Tirunelveli">Tirunelveli</option>
+    <option value="Vellore">Vellore</option>
+    <option value="Tiruppur">Tiruppur</option>
+    <option value="Dharmapuri">Dharmapuri</option>
+    <option value="Kanchipuram">Kanchipuram</option>
+    <option value="Karur">Karur</option>
+    <option value="Namakkal">Namakkal</option>
+    <option value="Pudukkottai">Pudukkottai</option>
+    <option value="Cuddalore">Cuddalore</option>
+  </select>
 
-        <label for="area">Area:</label>
-        <select id="area" name="area" required>
-            <option value="" disabled selected>Select Your Area or Type</option>
-        </select>
-        <input type="text" id="customArea" name="customArea" placeholder="Type your area (if not listed)" style="display:none;" oninput="toggleCustomArea()">
+  <label for="area">Area:</label>
+  <select id="area" name="area" required>
+    <option value="" disabled selected>Select Your Area or Type</option>
+  </select>
+  <input type="text" id="customArea" name="customArea" placeholder="Type your area (if not listed)" style="display:none;" oninput="toggleCustomArea()">
 
-        <label for="expiryDate">Expiry Time:</label>
-        <input type="time" id="expiryDate" name="expiryDate" required>
+  <label for="expiryDate">Expiry Time:</label>
+  <input type="time" id="expiryDate" name="expiryDate" required>
 
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
+  <label for="phoneNumber">Phone Number:</label>
+  <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
 
-        <button type="submit">Submit Donation</button>
-    </form>
+  <button type="submit">Submit Donation</button>
+</form>
+
 
     <h2>Available Donations</h2>
     <div id="donation-list"></div>
