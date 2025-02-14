@@ -17,145 +17,73 @@
 <body>
 
     <h2>Food Donation Form</h2>
-  <form action="https://formsubmit.co/mr.errorhere07@gmail.com" method="POST">
-  <label for="foodName">Food Name:</label>
-  <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
+ <form id="donationForm">
+    <label for="foodName">Food Name:</label>
+    <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
 
-  <label for="quantity">Quantity:</label>
-  <input type="number" id="quantity" name="quantity" placeholder="Enter quantity (e.g., kg, servings)" required>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" placeholder="Enter quantity (e.g., kg, servings)" required>
 
-  <label for="district">District:</label>
-  <select id="district" name="district" required onchange="updateAreas()">
-    <option value="" disabled selected>Select Your District</option>
-    <option value="Chennai">Chennai</option>
-    <option value="Coimbatore">Coimbatore</option>
-    <option value="Madurai">Madurai</option>
-    <option value="Trichy">Trichy</option>
-    <option value="Salem">Salem</option>
-    <option value="Erode">Erode</option>
-    <option value="Tirunelveli">Tirunelveli</option>
-    <option value="Vellore">Vellore</option>
-    <option value="Tiruppur">Tiruppur</option>
-    <option value="Dharmapuri">Dharmapuri</option>
-    <option value="Kanchipuram">Kanchipuram</option>
-    <option value="Karur">Karur</option>
-    <option value="Namakkal">Namakkal</option>
-    <option value="Pudukkottai">Pudukkottai</option>
-    <option value="Cuddalore">Cuddalore</option>
-  </select>
+    <label for="district">District:</label>
+    <select id="district" name="district" required onchange="updateAreas()">
+        <option value="" disabled selected>Select Your District</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Coimbatore">Coimbatore</option>
+        <option value="Madurai">Madurai</option>
+        <option value="Trichy">Trichy</option>
+        <option value="Salem">Salem</option>
+        <option value="Erode">Erode</option>
+        <option value="Tirunelveli">Tirunelveli</option>
+        <option value="Vellore">Vellore</option>
+        <option value="Tiruppur">Tiruppur</option>
+        <option value="Dharmapuri">Dharmapuri</option>
+        <option value="Kanchipuram">Kanchipuram</option>
+        <option value="Karur">Karur</option>
+        <option value="Namakkal">Namakkal</option>
+        <option value="Pudukkottai">Pudukkottai</option>
+        <option value="Cuddalore">Cuddalore</option>
+    </select>
 
-  <label for="area">Area:</label>
-  <select id="area" name="area" required>
-    <option value="" disabled selected>Select Your Area or Type</option>
-  </select>
-  <input type="text" id="customArea" name="customArea" placeholder="Type your area (if not listed)" style="display:none;" oninput="toggleCustomArea()">
+    <label for="area">Area:</label>
+    <select id="area" name="area">
+        <option value="" disabled selected>Select Your Area or Type</option>
+    </select>
+    <input type="text" id="customArea" name="customArea" placeholder="Type your area (if not listed)" style="display:none;" oninput="toggleCustomArea()">
 
-  <label for="expiryDate">Expiry Time:</label>
-  <input type="time" id="expiryDate" name="expiryDate" required>
+    <label for="expiryDate">Expiry Time:</label>
+    <input type="time" id="expiryDate" name="expiryDate" required>
 
-  <label for="phoneNumber">Phone Number:</label>
-  <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
 
-  <button type="submit">Submit Donation</button>
+    <button type="submit">Submit Donation</button>
 </form>
 
+<script>
+document.getElementById("donationForm").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    <h2>Available Donations</h2>
-    <div id="donation-list"></div>
+    var formData = new FormData(this);
 
-    <script>
-        document.getElementById("donation-form").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            // Get form values
-            let foodName = document.getElementById("foodName").value;
-            let quantity = document.getElementById("quantity").value;
-            let district = document.getElementById("district").value;
-            let area = document.getElementById("area").value || document.getElementById("customArea").value;
-            let expiryDate = document.getElementById("expiryDate").value;
-            let phoneNumber = document.getElementById("phoneNumber").value;
-
-            // Create a new donation entry
-            let donationEntry = document.createElement("p");
-            donationEntry.textContent = `🍽️ ${foodName} - ${quantity} | 📍 ${district}, ${area} | ⏳ Expiry: ${expiryDate} | 📞 ${phoneNumber}`;
-            document.getElementById("donation-list").appendChild(donationEntry);
-
-            // Send data to FormSubmit
-            let formData = new FormData();
-            formData.append("foodName", foodName);
-            formData.append("quantity", quantity);
-            formData.append("district", district);
-            formData.append("area", area);
-            formData.append("expiryDate", expiryDate);
-            formData.append("phoneNumber", phoneNumber);
-
-            fetch("https://formsubmit.co/mr.errorhere07@gmail.com", {
-                method: "POST",
-                body: formData
-            }).then(response => response.json())
-              .then(data => console.log("Email sent:", data))
-              .catch(error => console.error("Error:", error));
-
-            // Clear form fields
-            document.getElementById("donation-form").reset();
-        });
-
-        function updateAreas() {
-            let district = document.getElementById("district").value;
-            let areaSelect = document.getElementById("area");
-            let customAreaInput = document.getElementById("customArea");
-
-            areaSelect.innerHTML = '<option value="" disabled selected>Select Your Area or Type</option>'; // Reset options
-            customAreaInput.style.display = "none"; // Hide custom area initially
-
-            // Sample areas based on district selection
-            let areaOptions = {
-                "Chennai": ["Anna Nagar", "T Nagar", "Velachery"],
-                "Coimbatore": ["Gandhipuram", "RS Puram", "Peelamedu"],
-                "Madurai": ["Simmakkal", "Goripalayam", "Anna Nagar"],
-                "Trichy": ["Srirangam", "Thillai Nagar", "Cantonment"],
-                "Salem": ["Fairlands", "Hasthampatti", "Gugai"],
-                "Erode": ["Perundurai", "Gobichettipalayam", "Karungalpalayam"],
-                "Tirunelveli": ["Palayamkottai", "Melapalayam", "Vannarpettai"],
-                "Vellore": ["Katpadi", "Gandhinagar", "Bagayam"],
-                "Tiruppur": ["Kangeyam", "Udumalpet", "Avinashi"],
-                "Dharmapuri": ["Pennagaram", "Hogenakkal", "Palacode"],
-                "Kanchipuram": ["Chengalpattu", "Uthiramerur", "Maduranthakam"],
-                "Karur": ["Kulithalai", "Aravakurichi", "Velliyanai"],
-                "Namakkal": ["Rasipuram", "Tiruchengode", "Mohanur"],
-                "Pudukkottai": ["Aranthangi", "Alangudi", "Illupur"],
-                "Cuddalore": ["Chidambaram", "Panruti", "Neyveli"]
-            };
-
-            if (areaOptions[district]) {
-                areaOptions[district].forEach(area => {
-                    let option = document.createElement("option");
-                    option.value = area;
-                    option.textContent = area;
-                    areaSelect.appendChild(option);
-                });
-
-                // Add an "Other" option
-                let otherOption = document.createElement("option");
-                otherOption.value = "Other";
-                otherOption.textContent = "Other (Type Below)";
-                areaSelect.appendChild(otherOption);
-            }
+    fetch("https://formcarry.com/s/t_gLP0XVD3n", {  // Your Formcarry API URL
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 200) {
+            alert("Donation submitted successfully!");
+            document.getElementById("donationForm").reset();
+        } else {
+            alert("Something went wrong! Please try again.");
         }
+    })
+    .catch(error => {
+        alert("Error submitting form. Check your internet connection.");
+    });
+});
+</script>
 
-        function toggleCustomArea() {
-            let areaSelect = document.getElementById("area");
-            let customAreaInput = document.getElementById("customArea");
-
-            if (areaSelect.value === "Other") {
-                customAreaInput.style.display = "block";
-                customAreaInput.required = true;
-            } else {
-                customAreaInput.style.display = "none";
-                customAreaInput.required = false;
-            }
-        }
-    </script>
 
 </body>
 </html>
