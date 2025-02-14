@@ -3,87 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Donation</title>
+    <title>Secure Food Waste Donation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+        h1, h2 {
             text-align: center;
         }
-        #donation-list {
-            margin-top: 20px;
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        li {
+            background: white;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
 
-    <h2>Food Donation Form</h2>
- <form id="donationForm">
-    <label for="foodName">Food Name:</label>
-    <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
+    <h1>Secure Food Waste Donation System</h1>
 
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" placeholder="Enter quantity (e.g., kg, servings)" required>
+    <form id="donationForm">
+        <label for="foodName">Food Name:</label>
+        <input type="text" id="foodName" placeholder="Enter food name" required>
 
-    <label for="district">District:</label>
-    <select id="district" name="district" required onchange="updateAreas()">
-        <option value="" disabled selected>Select Your District</option>
-        <option value="Chennai">Chennai</option>
-        <option value="Coimbatore">Coimbatore</option>
-        <option value="Madurai">Madurai</option>
-        <option value="Trichy">Trichy</option>
-        <option value="Salem">Salem</option>
-        <option value="Erode">Erode</option>
-        <option value="Tirunelveli">Tirunelveli</option>
-        <option value="Vellore">Vellore</option>
-        <option value="Tiruppur">Tiruppur</option>
-        <option value="Dharmapuri">Dharmapuri</option>
-        <option value="Kanchipuram">Kanchipuram</option>
-        <option value="Karur">Karur</option>
-        <option value="Namakkal">Namakkal</option>
-        <option value="Pudukkottai">Pudukkottai</option>
-        <option value="Cuddalore">Cuddalore</option>
-    </select>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" placeholder="Enter quantity (e.g., kg, servings)" required>
 
-    <label for="area">Area:</label>
-    <select id="area" name="area">
-        <option value="" disabled selected>Select Your Area or Type</option>
-    </select>
-    <input type="text" id="customArea" name="customArea" placeholder="Type your area (if not listed)" style="display:none;" oninput="toggleCustomArea()">
+        <label for="district">District:</label>
+        <select id="district" required onchange="updateAreas()">
+            <option value="" disabled selected>Select Your District</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Coimbatore">Coimbatore</option>
+            <option value="Madurai">Madurai</option>
+            <option value="Trichy">Trichy</option>
+            <option value="Salem">Salem</option>
+        </select>
 
-    <label for="expiryDate">Expiry Time:</label>
-    <input type="time" id="expiryDate" name="expiryDate" required>
+        <label for="area">Area:</label>
+        <select id="area" required>
+            <option value="" disabled selected>Select Your Area</option>
+        </select>
+        <input type="text" id="customArea" placeholder="Type your area (if not listed)" style="display:none;" oninput="toggleCustomArea()">
 
-    <label for="phoneNumber">Phone Number:</label>
-    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
+        <label for="expiryDate">Expiry Time:</label>
+        <input type="time" id="expiryDate" required>
 
-    <button type="submit">Submit Donation</button>
-</form>
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" placeholder="Enter your phone number" required>
 
-<script>
-document.getElementById("donationForm").addEventListener("submit", function (e) {
-    e.preventDefault();
+        <button type="submit">Submit Donation</button>
+    </form>
 
-    var formData = new FormData(this);
+    <h2>Available Donations</h2>
+    <ul id="donations"></ul>
 
-    fetch("https://formcarry.com/s/t_gLP0XVD3n", {  // Your Formcarry API URL
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.code === 200) {
-            alert("Donation submitted successfully!");
-            document.getElementById("donationForm").reset();
-        } else {
-            alert("Something went wrong! Please try again.");
+    <script>
+        // Predefined areas based on selected districts
+        const areas = {
+            Chennai: ["Anna Nagar", "T Nagar", "Adyar"],
+            Coimbatore: ["Peelamedu", "Singanallur"],
+            Madurai: ["Anna Nagar", "Melur"],
+            Trichy: ["Thillai Nagar", "Srirangam"],
+            Salem: ["Hasthampatti", "Fairlands"]
+        };
+
+        function updateAreas() {
+            const district = document.getElementById("district").value;
+            const areaSelect = document.getElementById("area");
+            const customAreaInput = document.getElementById("customArea");
+
+            areaSelect.innerHTML = "<option value='' disabled selected>Select Your Area</option>";
+
+            if (district && areas[district]) {
+                areas[district].forEach(area => {
+                    const option = document.createElement("option");
+                    option.value = area;
+                    option.textContent = area;
+                    areaSelect.appendChild(option);
+                });
+                areaSelect.style.display = "block";
+                customAreaInput.style.display = "none";
+            } else {
+                areaSelect.style.display = "none";
+                customAreaInput.style.display = "block";
+            }
         }
-    })
-    .catch(error => {
-        alert("Error submitting form. Check your internet connection.");
-    });
-});
-</script>
 
+        function toggleCustomArea() {
+            const areaSelect = document.getElementById("area");
+            const customAreaInput = document.getElementById("customArea");
+
+            if (customAreaInput.value) {
+                areaSelect.style.display = "none";
+            } else {
+                areaSelect.style.display = "block";
+            }
+        }
+
+        function getDonations() {
+            return JSON.parse(localStorage.getItem("donations")) || [];
+        }
+
+        function saveDonations(donations) {
+            localStorage.setItem("donations", JSON.stringify(donations));
+        }
+
+        function renderDonations() {
+            const donations = getDonations();
+            const donationsList = document.getElementById("donations");
+            donationsList.innerHTML = "";
+            donations.forEach((donation, index) => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <strong>Food:</strong> ${donation.foodName}<br>
+                    <strong>Quantity:</strong> ${donation.quantity}<br>
+                    <strong>District:</strong> ${donation.district}<br>
+                    <strong>Area:</strong> ${donation.area || donation.customArea}<br>
+                    <strong>Expiry:</strong> ${donation.expiryDate}<br>
+                    <strong>Phone:</strong> ${donation.phoneNumber}<br>
+                    <button onclick="deleteDonation(${index})">Delete</button>
+                `;
+                donationsList.appendChild(li);
+            });
+        }
+
+        function deleteDonation(index) {
+            const donations = getDonations();
+            donations.splice(index, 1);
+            saveDonations(donations);
+            renderDonations();
+        }
+
+        document.getElementById("donationForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const formData = {
+                foodName: document.getElementById("foodName").value,
+                quantity: document.getElementById("quantity").value,
+                district: document.getElementById("district").value,
+                area: document.getElementById("area").value || document.getElementById("customArea").value,
+                expiryDate: document.getElementById("expiryDate").value,
+                phoneNumber: document.getElementById("phoneNumber").value
+            };
+
+            fetch("https://formcarry.com/s/t_gLP0XVD3n", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    alert("Donation submitted successfully!");
+                    const donations = getDonations();
+                    donations.push(formData);
+                    saveDonations(donations);
+                    renderDonations();
+                    document.getElementById("donationForm").reset();
+                } else {
+                    alert("Error submitting form. Try again.");
+                }
+            })
+            .catch(error => {
+                alert("Error submitting form. Check your internet connection.");
+                console.error("Submission Error:", error);
+            });
+        });
+
+        renderDonations();
+    </script>
 
 </body>
 </html>
